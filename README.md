@@ -1,12 +1,12 @@
 genexterns
 ==========
 
-Generate Google Closure Compiler externs output from the JavaScript source file(s)
+Generate Closure Compiler externs output from the JavaScript source file(s)
 
 ## Dependencies
 
-1. `[phantomjs](http://phantomjs.org/)`
-2. `[js-beautify](https://github.com/einars/js-beautify)` (Optional)
+1. [`phantomjs`](http://phantomjs.org/)
+2. [`js-beautify`](https://github.com/einars/js-beautify) (Optional)
 
 ## Usage
 
