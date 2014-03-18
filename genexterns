@@ -1,0 +1,89 @@
+#!/usr/bin/env phantomjs
+
+var args = require('system').args;
+var page = require('webpage').create();
+
+function extern(obj) {
+  var msg = "";
+  var brace = typeof obj == "object" || isfunc(obj);
+  
+  if (brace) {
+    msg += "{";
+  }
+  
+  for (var p in obj) {
+    if (msg.length > 1) {
+      msg += ",";
+    }
+    msg += quotestr(p) + " : ";
+    if (typeof obj[p] == "object") {
+      var r = extern(obj[p]);
+      
+      if (r == "{}") {
+        msg += "function(){}";
+      } else {
+        msg += r;
+      }
+    } else {
+      if (isfunc(obj[p])) {
+        msg += "function(){}";
+      } else {
+        msg += "{}";
+      }
+    }
+  }
+  
+  if (brace) {
+    msg += "}";
+  }
+  
+  return msg;
+}
+
+function isfunc(obj) {
+  return Object.prototype.toString.call(obj) === "[object Function]";
+}
+
+function quotestr(str) {
+  return '"' + str + '"';
+}
+
+function run() {
+  page.open("about:blank", function(status) {
+    var before = page.evaluate(function() {
+      return window;
+    });
+    
+    args.forEach(function(arg, i) {
+      if (i > 0) {
+        if (!page.injectJs(arg)) {
+          console.error("// Loading", arg, "failed!");
+        }
+      }
+    });
+    
+    var after = page.evaluate(function() {
+      return window;
+    });
+    
+    for (var i in after) {
+      if (typeof before[i] !== "undefined") {
+        delete after[i];
+      } else {
+        console.log("var", i, "=", extern(after[i]), ";");
+      }
+    }
+    
+    phantom.exit();
+  });
+}
+
+function main() {
+  if (args.length === 1) {
+    console.error("Usage:", args[0], "<filename> [filename] ...");
+    phantom.exit();
+  }
+  run();
+}
+
+main();
