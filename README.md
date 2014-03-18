@@ -10,7 +10,7 @@ Generate Closure Compiler externs output from the JavaScript source file(s)
 
 ## Usage
 
-```
+```bash
 $ genexterns path/to/some/library.js | js-beautify -f - > path/to/closure/externs.js
 ```
 
