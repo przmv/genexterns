@@ -17,3 +17,7 @@ $ genexterns path/to/some/library.js | js-beautify -f - > path/to/closure/extern
 ## More information
 
 * [Declaring Externs](https://developers.google.com/closure/compiler/docs/api-tutorial3#externs)
+
+## License
+
+MIT
